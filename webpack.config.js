@@ -40,6 +40,7 @@ module.exports = {
       '@core': path.resolve(__dirname, 'src/core'),
     },
   },
+
   devServer: {
     port: 3000,
     hot: isDev,
