@@ -1,0 +1,12 @@
+# https://github.com/babel/babel-eslint
+parser: babel-eslint
+
+extends:
+  - 'airbnb-base'
+
+env:
+  node: true
+  jest: true
+
+rules:
+  no-console: 0
