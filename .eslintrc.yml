@@ -1,4 +1,7 @@
 # https://github.com/babel/babel-eslint
+plugins:
+  - babel
+
 parser: babel-eslint
 
 extends:
@@ -6,8 +9,8 @@ extends:
 
 env:
   node: true
-  jest: true
+  browser: true
+  es6: true
 
 rules:
   no-console: 0
-  
