@@ -6,4 +6,4 @@
 // import 'bootstrap/js/dist/dropdown'
 import './scss/app.scss';
 
-console.log('test!');
+console.log('test');
