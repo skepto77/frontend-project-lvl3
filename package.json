@@ -37,7 +37,7 @@
     "eslint-plugin-import": "^2.22.0",
     "fs": "0.0.1-security",
     "html-webpack-plugin": "^4.4.1",
-    "lodash": "^4.17.20",
+
     "mini-css-extract-plugin": "^0.11.2",
     "node-sass": "^4.14.1",
     "sass-loader": "^10.0.2",
@@ -46,6 +46,10 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "axios": "^0.21.0",
+    "yup": "^0.29.3",
+    "on-change": "^2.1.4",
+    "lodash": "^4.17.20",
     "@babel/polyfill": "^7.11.5",
     "bootstrap": "^4.5.2"
   }

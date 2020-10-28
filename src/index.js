@@ -5,5 +5,6 @@
 // import 'bootstrap/js/dist/util';
 // import 'bootstrap/js/dist/dropdown'
 import './scss/app.scss';
+import app from './app';
 
-console.log('test');
+app();
