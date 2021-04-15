@@ -6,7 +6,21 @@
   <title>RSS reader</title>
 </head>
 <body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-lg-8 mx-auto d-flex justify-content-end">
+        <a href="#" id="en" role="button" class="lang btn btn-sm btn-light">
+          english
+        </a>
+          <a href="#" id="ru" class="lang btn btn-sm btn-light" role="button"  aria-pressed="true">
+          русский
+          </a>
+      </div>
+    </div>
+  </div>
   <div class="jumbotron bg-white" style="margin:10px 0!important; padding:20px 0!important;">
+
     <h1 class="text-center">RSS reader</h1>
     <div class="container">
       <div class="row">
@@ -19,8 +33,9 @@
               <button type="submit" class="btn btn-lg btn-primary w-30" disabled>Submit</button>
             </div>
           </form>
-          <small id="rssExample" class="text-muted">example: <a href="https://lenta.ru/rss/news">https://lenta.ru/rss/news</a>, </small> 
-          <small id="rssExample2" class="text-muted"><a href="https://ru.hexlet.io/lessons.rss">https://ru.hexlet.io/lessons.rss</a></small> 
+          <small class="rssExample text-muted"><span  data-i18n="content.example">example:</span> <a href="https://lenta.ru/rss/news">https://lenta.ru/rss/news</a>, </small> 
+          <small class="rssExample text-muted"><a href="https://ru.hexlet.io/lessons.rss">https://ru.hexlet.io/lessons.rss</a></small> 
+          <small class="rssExample text-muted"><a href="http://lorem-rss.herokuapp.com/feed?unit=second&interval=30">RSS generator with 30 sec interval</a></small> 
           <div class="alert alert-danger mt-4 mb-4 invisible" role="alert" id="errors"></div>
           <!-- <div class="input-group mb-3">
             <select class="custom-select"  id="rssExample3">

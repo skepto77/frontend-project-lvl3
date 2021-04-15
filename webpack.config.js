@@ -66,8 +66,9 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              hmr: isDev,
-              reloadAll: true,
+              esModule: true,
+              // hmr: isDev,
+              // reloadAll: true,
             },
           },
           'css-loader',
