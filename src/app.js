@@ -23,12 +23,38 @@ const linksExamples = document.querySelectorAll('.rssExample>a');
 const linksLanguages = document.querySelectorAll('.lang');
 const spinner = document.querySelector('.spinner-border');
 // const proxy = 'https://cors-anywhere.herokuapp.com/';
-const proxy = 'https://api.allorigins.win/raw?url=';
+// const proxy = 'https://api.allorigins.win/raw?url=';
 // const proxy = 'https://thingproxy.freeboard.io/fetch/';
+const proxy = 'https://hexlet-allorigins.herokuapp.com/raw?url=';
 
 const watchedState = watch(state, getElementValues());
 
 const feedIsLoaded = (value) => (state.rssForm.data.feeds.find((i) => i.link === value));
+
+const checkUpdates = (feed) => {
+  console.log('upd');
+  const { link: url, id, lastUpdate } = feed;
+  axios.get(`${proxy}${url}`)
+    .then((response) => {
+      const parser = new DOMParser();
+      const rssData = parser.parseFromString(response.data, 'text/xml');
+      const items = rssData.querySelectorAll('item');
+      const newItems = [...items].filter((item) => new Date(item.querySelector('pubDate').textContent) > lastUpdate);
+
+      feedIsLoaded(url).lastUpdate = (newItems.length > 0) ? new Date(newItems[0].querySelector('pubDate').textContent) : lastUpdate;
+      const newPosts = [...newItems].map((item) => {
+        const name = item.querySelector('title').textContent;
+        const link = item.querySelector('link').textContent;
+        return { name, link, idFeed: id };
+      });
+      watchedState.rssForm.data.items = [...newPosts, ...state.rssForm.data.items];
+      setTimeout(() => checkUpdates(feed), 5000);
+    })
+    .catch((error) => {
+      console.log(error);
+      watchedState.rssForm.errors = 'errrr';
+    });
+};
 
 const parse = (data) => {
   const parser = new DOMParser();
@@ -42,13 +68,21 @@ const parse = (data) => {
   const id = _.uniqueId();
   const title = rssData.querySelector('title').textContent;
   const items = rssData.querySelectorAll('item');
+  const lastDateOfPost = new Date(items[0].querySelector('pubDate').textContent);
   const posts = [...items].map((item) => {
     const name = item.querySelector('title').textContent;
     const link = item.querySelector('link').textContent;
     return { name, link, idFeed: id };
   });
   state.rssForm.data.items = [...state.rssForm.data.items, ...posts];
-  watchedState.rssForm.data.feeds.push({ id, name: title, link: state.rssForm.data.url });
+  const feed = {
+    id,
+    name: title,
+    link: state.rssForm.data.url,
+    lastUpdate: lastDateOfPost,
+  };
+  watchedState.rssForm.data.feeds.push(feed);
+  setTimeout(() => checkUpdates(feed), 5000);
 };
 
 const getRss = (url) => {
@@ -60,15 +94,18 @@ const getRss = (url) => {
       elements.submitBtn.disabled = true;
       return url;
     })
-    // .then(() => {
-    //   setTimeout(getRss(url), 1000);
+    // .then((link) => {
+    //   console.log(link);
+    // })
+    // .then((link) => {
+    //   setTimeout(checkUpdates(link), 10000);
     // })
     .catch((error) => {
       console.log('dfdfd', error);
       watchedState.rssForm.errors = (error.response) ? (`${error.response.status}`) : `${error.message}`;
     })
     .finally(() => {
-      state.rssForm.data.url = '';
+      // state.rssForm.data.url = '';
       spinner.classList.add('invisible');
     });
 };

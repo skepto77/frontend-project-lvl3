@@ -19,7 +19,7 @@ const itemsResult = document.querySelector('#items');
 const errors = document.getElementById('errors');
 
 const watch = (state, elements) => onChange(state, (path, value) => {
-  console.log(state, path, value);
+  // console.log(state, path, value);
   switch (path) {
     case 'rssForm.errors':
       if (value !== '') {
@@ -35,6 +35,9 @@ const watch = (state, elements) => onChange(state, (path, value) => {
       break;
     case 'rssForm.data.feeds':
       feedsResult.innerHTML = `<h2 class="feeds__title">${i18next.t('feedsTitle')}</h2><ul class="list-group mb-5">${state.rssForm.data.feeds.map((feed) => `<li class="list-group-item">${feed.name}</li>`).join('')}</ul>`;
+      itemsResult.innerHTML = `<h2 class="posts__title">${i18next.t('postsTitle')}</h2><ul class="list-group mb-5">${state.rssForm.data.items.map((item) => `<li class="list-group-item"><a href="${item.link}">${item.name}</a></li>`).join('')}</ul>`;
+      break;
+    case 'rssForm.data.items': // itemsUpdate
       itemsResult.innerHTML = `<h2 class="posts__title">${i18next.t('postsTitle')}</h2><ul class="list-group mb-5">${state.rssForm.data.items.map((item) => `<li class="list-group-item"><a href="${item.link}">${item.name}</a></li>`).join('')}</ul>`;
       break;
     case 'rssForm.lang':
@@ -54,8 +57,8 @@ const watch = (state, elements) => onChange(state, (path, value) => {
       } catch (validationErrors) {
         state.rssForm.errors = validationErrors.message;
         elements.submitBtn.disabled = true;
-        errors.classList.remove('invisible').add('visible');
         errors.innerHTML = i18next.t(`errors.${validationErrors.message}`);
+        errors.classList.remove('invisible').add('visible');
       }
       break;
     default:
