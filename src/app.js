@@ -23,10 +23,12 @@ const linksExamples = document.querySelectorAll('.rssExample>a');
 const linksLanguages = document.querySelectorAll('.lang');
 const spinner = document.querySelector('.spinner-border');
 // const proxy = 'https://cors-anywhere.herokuapp.com/';
-// const proxy = 'https://api.allorigins.win/raw?url=';
-const proxy = 'https://thingproxy.freeboard.io/fetch/';
+const proxy = 'https://api.allorigins.win/raw?url=';
+// const proxy = 'https://thingproxy.freeboard.io/fetch/';
 
 const watchedState = watch(state, getElementValues());
+
+const feedIsLoaded = (value) => (state.rssForm.data.feeds.find((i) => i.link === value));
 
 const parse = (data) => {
   const parser = new DOMParser();
@@ -66,21 +68,24 @@ const getRss = (url) => {
       watchedState.rssForm.errors = (error.response) ? (`${error.response.status}`) : `${error.message}`;
     })
     .finally(() => {
+      state.rssForm.data.url = '';
       spinner.classList.add('invisible');
     });
 };
 
 const setEvents = () => {
-  state.rssForm.data.errors = '';
   linksExamples.forEach((item) => {
     item.addEventListener('click', (e) => {
       e.preventDefault();
+      watchedState.rssForm.errors = '';
       elements.input.value = e.target.href;
-      if (state.rssForm.data.feeds.filter((i) => i.link === e.target.href).length > 0) {
+      console.log(feedIsLoaded(elements.input.value));
+      console.log(state.rssForm.errors);
+      if (feedIsLoaded(elements.input.value)) {
         watchedState.rssForm.errors = 'dublicate';
         return;
       }
-      watchedState.rssForm.data.url = e.target.href;
+      watchedState.rssForm.data.url = elements.input.value;
     });
   });
 
@@ -92,8 +97,8 @@ const setEvents = () => {
   });
 
   elements.input.addEventListener('input', (e) => {
-    state.rssForm.data.errors = '';
-    if (state.rssForm.data.feeds.filter((item) => item.link === e.target.value).length > 0) {
+    watchedState.rssForm.errors = '';
+    if (feedIsLoaded(e.target.value)) {
       watchedState.rssForm.errors = 'dublicate';
       return;
     }
@@ -103,13 +108,14 @@ const setEvents = () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     getRss(state.rssForm.data.url);
+    state.rssForm.errors = '';
   });
 };
 
 export default () => {
   i18next.init({
     lng: state.rssForm.lang,
-    debug: true,
+    debug: false,
     resources: {
       en: {
         translation: {
@@ -151,6 +157,8 @@ export default () => {
       },
     },
   })
-  // .then(setTranslation(elements))
-    .then(setEvents());
+    .then(setEvents())
+    .catch((error) => {
+      console.log(error);
+    });
 };

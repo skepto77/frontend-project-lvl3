@@ -11,7 +11,7 @@ import { getElementValues, setTranslation } from './translator';
 const yup = !y.object ? y.default : y;
 
 const schema = yup.object().shape({
-  url: yup.string().required().url('errors.incorrectUrl'),
+  url: yup.string().required().url('incorrectUrl'),
 });
 
 const feedsResult = document.querySelector('#feeds');
@@ -19,12 +19,19 @@ const itemsResult = document.querySelector('#items');
 const errors = document.getElementById('errors');
 
 const watch = (state, elements) => onChange(state, (path, value) => {
-  // console.log(state, path, value);
+  console.log(state, path, value);
   switch (path) {
     case 'rssForm.errors':
-      errors.innerHTML = `${i18next.t(`errors.${value}`)}`;
-      errors.classList.remove('invisible');
-      elements.input.classList.add('is-invalid');
+      if (value !== '') {
+        errors.innerHTML = `${i18next.t(`errors.${value}`)}`;
+        elements.submitBtn.disabled = true;
+        errors.classList.remove('invisible');
+        elements.input.classList.add('is-invalid');
+        return;
+      }
+      elements.submitBtn.disabled = false;
+      errors.classList.add('invisible');
+      elements.input.classList.remove('is-invalid');
       break;
     case 'rssForm.data.feeds':
       feedsResult.innerHTML = `<h2 class="feeds__title">${i18next.t('feedsTitle')}</h2><ul class="list-group mb-5">${state.rssForm.data.feeds.map((feed) => `<li class="list-group-item">${feed.name}</li>`).join('')}</ul>`;
@@ -33,7 +40,6 @@ const watch = (state, elements) => onChange(state, (path, value) => {
     case 'rssForm.lang':
       i18next.changeLanguage(value)
         .then(() => {
-          console.log(state.rssForm);
           setTranslation(getElementValues());
           document.getElementById('errors').innerHTML = i18next.t(`errors.${state.rssForm.errors}`);
         });
@@ -46,12 +52,10 @@ const watch = (state, elements) => onChange(state, (path, value) => {
         errors.innerHTML = '';
         errors.classList.add('invisible');
       } catch (validationErrors) {
-        console.log(validationErrors);
         state.rssForm.errors = validationErrors.message;
-        errors.innerHTML = i18next.t(`${validationErrors.message}`);
-        // errors.innerHTML = validationErrors.inner.join('<br>');
-        errors.classList.remove('invisible').add('visible');
         elements.submitBtn.disabled = true;
+        errors.classList.remove('invisible').add('visible');
+        errors.innerHTML = i18next.t(`errors.${validationErrors.message}`);
       }
       break;
     default:
