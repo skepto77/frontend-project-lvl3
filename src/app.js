@@ -12,7 +12,7 @@ const state = {
       items: [],
     },
     lang: 'en',
-    errors: [],
+    errors: '',
   },
 }; // ?
 
@@ -23,13 +23,20 @@ const linksExamples = document.querySelectorAll('.rssExample>a');
 const linksLanguages = document.querySelectorAll('.lang');
 const spinner = document.querySelector('.spinner-border');
 // const proxy = 'https://cors-anywhere.herokuapp.com/';
-const proxy = 'https://api.allorigins.win/raw?url=';
+// const proxy = 'https://api.allorigins.win/raw?url=';
+const proxy = 'https://thingproxy.freeboard.io/fetch/';
 
 const watchedState = watch(state, getElementValues());
 
 const parse = (data) => {
   const parser = new DOMParser();
   const rssData = parser.parseFromString(data, 'text/xml');
+
+  console.log(rssData);
+  if (rssData.querySelector('parsererror')) {
+    throw new Error('parserError');
+  }
+
   const id = _.uniqueId();
   const title = rssData.querySelector('title').textContent;
   const items = rssData.querySelectorAll('item');
@@ -55,7 +62,8 @@ const getRss = (url) => {
     //   setTimeout(getRss(url), 1000);
     // })
     .catch((error) => {
-      watchedState.rssForm.errors = error;
+      console.log('dfdfd', error);
+      watchedState.rssForm.errors = (error.response) ? (`${error.response.status}`) : `${error.message}`;
     })
     .finally(() => {
       spinner.classList.add('invisible');
@@ -63,12 +71,13 @@ const getRss = (url) => {
 };
 
 const setEvents = () => {
+  state.rssForm.data.errors = '';
   linksExamples.forEach((item) => {
     item.addEventListener('click', (e) => {
       e.preventDefault();
       elements.input.value = e.target.href;
-      if (state.rssForm.data.feeds.filter((item) => item.link === e.target.href).length > 0) {
-        watchedState.rssForm.errors = `${i18next.t('errors.dublicate')}`;
+      if (state.rssForm.data.feeds.filter((i) => i.link === e.target.href).length > 0) {
+        watchedState.rssForm.errors = 'dublicate';
         return;
       }
       watchedState.rssForm.data.url = e.target.href;
@@ -83,9 +92,9 @@ const setEvents = () => {
   });
 
   elements.input.addEventListener('input', (e) => {
-    // eslint-disable-next-line max-len
+    state.rssForm.data.errors = '';
     if (state.rssForm.data.feeds.filter((item) => item.link === e.target.value).length > 0) {
-      watchedState.rssForm.errors = `${i18next.t('errors.dublicate')}`;
+      watchedState.rssForm.errors = 'dublicate';
       return;
     }
     watchedState.rssForm.data.url = e.target.value;
@@ -112,6 +121,12 @@ export default () => {
           txtExample: 'example:',
           errors: {
             dublicate: 'This feed is already loaded',
+            incorrectUrl: 'Incorrect URL',
+            parserError: ' There is no rss feed for this url. Parsing error',
+            403: 'Request failed with status code 403',
+            404: 'Page not found. Error 404',
+            'Network Error': 'Server not found. Network error',
+            default: 'unknown error',
           },
         },
       },
@@ -125,10 +140,17 @@ export default () => {
           txtExample: 'пример:',
           errors: {
             dublicate: 'Этот канал уже загружен',
+            incorrectUrl: 'Введен некорректный адрес страницы',
+            parserError: 'По этому удресу нет rss ленты. Ошибка парсинга',
+            403: 'Запрос не выполнен. Код ошибки 403',
+            404: 'Стараница не найдена. Ошибка 404',
+            'Network Error': 'Сервер не найден. Ошибка сети',
+            default: 'ошибка',
           },
         },
       },
     },
   })
+  // .then(setTranslation(elements))
     .then(setEvents());
 };
