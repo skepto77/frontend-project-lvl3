@@ -10,7 +10,7 @@ import {
 const setHandlers = (state) => {
   const watchedState = watch(state, getTranslatableElements());
   const feedIsLoaded = (value) => state.rssForm.data.feeds.find((i) => i.link === value);
-  const timeout = 111000;
+  const timeout = 11000;
 
   const elements = getTranslatableElements();
 
