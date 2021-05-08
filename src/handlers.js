@@ -10,12 +10,12 @@ import {
 const setHandlers = (state) => {
   const watchedState = watch(state, getTranslatableElements());
   const feedIsLoaded = (value) => state.rssForm.data.feeds.find((i) => i.link === value);
-  const timeout = 5000;
+  const timeout = 111000;
 
   const elements = getTranslatableElements();
 
   const checkUpdates = (feed) => {
-    console.log('upd');
+    // console.log('upd');
     const { link, lastUpdate } = feed;
     getRss(link)
       .then((data) => {
@@ -83,6 +83,34 @@ const setHandlers = (state) => {
       });
 
     e.target.reset();
+  });
+
+  document.addEventListener('DOMNodeInserted', () => {
+    const btnDetails = document.querySelectorAll('#posts li>.btn');
+    // console.log(btnDetails);
+    btnDetails.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // eslint-disable-next-line no-param-reassign
+        state.rssForm.readedPostsId = [...state.rssForm.readedPostsId, e.target.getAttribute('data-modal')];
+        watchedState.rssForm.status = 'modal';
+        watchedState.rssForm.status = 'filling';
+        console.log('btnDetails');
+        const modal = document.getElementById(e.target.getAttribute('data-modal'));
+        modal.classList.add('show');
+        const close = modal.querySelectorAll('[data-bs-dismiss]');
+        close.forEach((btn1) => {
+          btn1.addEventListener('click', () => {
+            modal.classList.remove('show');
+          });
+        });
+        modal.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (event.target !== modal) return;
+          modal.classList.remove('show');
+        });
+      });
+    });
   });
 };
 

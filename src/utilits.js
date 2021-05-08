@@ -43,4 +43,6 @@ export const form = document.querySelector('form');
 export const btnExamplesLinks = document.querySelectorAll('.rssExample');
 export const btnLanguages = document.querySelectorAll('.lang');
 
+export const isPostViewed = (state, id) => state.rssForm.readedPostsId.includes(`p_${id}`);
+
 export { getTranslatableElements, setTranslation };

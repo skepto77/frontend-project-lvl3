@@ -32,6 +32,9 @@ export default () => {
             placeholder: 'Enter rss feed url',
             submitBtn: 'Submit',
             txtExample: 'example:',
+            btnDetails: 'more details',
+            btnClose: 'Close',
+            btnReed: 'Reed the article',
             errors: {
               dublicate: 'This feed is already loaded',
               incorrectUrl: 'Incorrect URL',
@@ -51,6 +54,9 @@ export default () => {
             placeholder: 'Введите адрес rss потока',
             submitBtn: 'Отправить',
             txtExample: 'пример:',
+            btnDetails: 'подробнее',
+            btnClose: 'Закрыть',
+            btnReed: 'Читать статью',
             errors: {
               dublicate: 'Этот канал уже загружен',
               incorrectUrl: 'Введен некорректный адрес страницы',
