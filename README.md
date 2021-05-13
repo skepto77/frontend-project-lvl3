@@ -4,5 +4,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/6191dd3eafcbf9464a51/maintainability)](https://codeclimate.com/github/skepto77/frontend-project-lvl3/maintainability)
 [![Travis-ci](https://travis-ci.com/skepto77/frontend-project-lvl3.svg?branch=master)](https://travis-ci.com/skepto77/frontend-project-lvl3)
 
-### demo
-[Site](frontend-project-lvl3-lovat-two.vercel.app)   
+Service for reading and aggregating RSS channels. The added channels are updated every 5 seconds. English and Russian languages are available
+
+[demo](frontend-project-lvl3-lovat-two.vercel.app)   
