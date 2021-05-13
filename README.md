@@ -1,9 +1,8 @@
-<h1>rss reader</h1>
-<p>
-<a href="https://codeclimate.com/github/skepto77/frontend-project-lvl3/maintainability"><img src="https://api.codeclimate.com/v1/badges/6191dd3eafcbf9464a51/maintainability" /></a>
+# rss reader  
 
-<a href="https://travis-ci.com/skepto77/frontend-project-lvl3"><img src="https://travis-ci.com/skepto77/frontend-project-lvl3.svg?branch=master"></a>
-</p>
-<p>
-demo: <a href="https://frontend-project-lvl3-lovat-two.vercel.app/" target="_blank">frontend-project-lvl3-lovat-two.vercel.app</a>
-</p>
+[![Actions Status](https://github.com/skepto77/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/skepto77/frontend-project-lvl3/actions)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6191dd3eafcbf9464a51/maintainability)](https://codeclimate.com/github/skepto77/frontend-project-lvl3/maintainability)
+[![Travis-ci](https://travis-ci.com/skepto77/frontend-project-lvl3.svg?branch=master)](https://travis-ci.com/skepto77/frontend-project-lvl3)
+
+### demo
+[Site](frontend-project-lvl3-lovat-two.vercel.app)   

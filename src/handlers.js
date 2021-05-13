@@ -15,7 +15,6 @@ const setHandlers = (state) => {
   const elements = getTranslatableElements();
 
   const checkUpdates = (feed) => {
-    // console.log('upd');
     const { link, lastUpdate } = feed;
     getRss(link)
       .then((data) => {
@@ -23,9 +22,8 @@ const setHandlers = (state) => {
         watchedState.rssForm.data.posts = [...newPosts, ...state.rssForm.data.posts];
         setTimeout(() => checkUpdates(feed), timeout);
       })
-      .catch((error) => {
-        console.log(error);
-        watchedState.rssForm.errors = 'Error of update';
+      .catch(() => {
+        watchedState.rssForm.messages = 'Error of update';
         setTimeout(() => checkUpdates(feed), timeout);
       });
   };
@@ -33,10 +31,10 @@ const setHandlers = (state) => {
   btnExamplesLinks.forEach((item) => {
     item.addEventListener('click', (e) => {
       e.preventDefault();
-      watchedState.rssForm.errors = '';
+      watchedState.rssForm.messages = '';
       elements.input.value = e.target.href;
       if (feedIsLoaded(elements.input.value)) {
-        watchedState.rssForm.errors = 'dublicate';
+        watchedState.rssForm.messages = 'dublicate';
         return;
       }
       watchedState.rssForm.data.url = elements.input.value;
@@ -51,9 +49,9 @@ const setHandlers = (state) => {
   });
 
   elements.input.addEventListener('input', (e) => {
-    watchedState.rssForm.errors = '';
+    watchedState.rssForm.messages = '';
     if (feedIsLoaded(e.target.value)) {
-      watchedState.rssForm.errors = 'dublicate';
+      watchedState.rssForm.messages = 'dublicate';
       watchedState.rssForm.data.url = '';
       return;
     }
@@ -63,20 +61,19 @@ const setHandlers = (state) => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     watchedState.rssForm.status = 'loading';
-
+    watchedState.rssForm.messages = '';
     getRss(state.rssForm.data.url)
       .then((data) => {
         watchedState.rssForm.data.feeds = [...state.rssForm.data.feeds, data.feeds];
         watchedState.rssForm.data.posts = [...data.posts, ...state.rssForm.data.posts];
+        watchedState.rssForm.messages = 'success';
         return data.feeds;
       })
       .then((feed) => {
         setTimeout(checkUpdates(feed), timeout);
       })
       .catch((error) => {
-        watchedState.rssForm.errors = (error.response)
-          ? (`${error.response.status}`)
-          : `${error.message}`;
+        watchedState.rssForm.messages = `${error.message}`;
       })
       .finally(() => {
         watchedState.rssForm.status = 'filling';

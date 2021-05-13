@@ -11,7 +11,7 @@ const getTranslatableElements = () => {
     btnClose: document.querySelectorAll('[data-bs-dismiss=modal]'),
     btnReed: document.querySelectorAll('.btn-reed'),
     txtExample: document.querySelector('[data-i18n="content.example"]'),
-    errors: document.getElementById('errors'),
+    message: document.getElementById('message'),
     placeholder: document.querySelector('input').placeholder,
   };
   return elements;
@@ -38,7 +38,7 @@ const setTranslation = (elements) => {
 export const spinner = document.querySelector('.spinner-border');
 export const feeds = document.querySelector('#feeds');
 export const posts = document.querySelector('#posts');
-export const errors = document.getElementById('errors');
+export const message = document.getElementById('message');
 export const form = document.querySelector('form');
 export const btnExamplesLinks = document.querySelectorAll('.rssExample');
 export const btnLanguages = document.querySelectorAll('.lang');

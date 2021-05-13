@@ -1,12 +1,17 @@
 import _ from 'lodash';
 
 const parse = (data, url) => {
+  // console.log(data);
   const parser = new DOMParser();
   const rssData = parser.parseFromString(data, 'text/xml');
 
   if (rssData.querySelector('parsererror')) {
-    throw new Error('parserError');
+    throw new TypeError('Parse Error');
   }
+  // console.log(rssData.querySelector('rss'));
+  // if (!rssData.querySelector('rss')) {
+  //   throw new TypeError('Parse Error');
+  // }
 
   const result = {
     feeds: null,

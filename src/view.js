@@ -10,7 +10,7 @@ import {
   spinner,
   feeds,
   posts,
-  errors,
+  message,
   isPostViewed,
 } from './utilits';
 
@@ -56,32 +56,40 @@ const renderPosts = (state) => {
   posts.append(div);
 };
 
+const renderStatus = (status, state, elements) => {
+  switch (status) {
+    case 'loading':
+      spinner.classList.remove('invisible');
+      break;
+    case 'modal':
+      renderPosts(state, elements);
+      break;
+    default:
+      spinner.classList.add('invisible');
+  }
+};
+
 const watch = (state, elements) => onChange(state, (path, value) => {
   // console.log(state, path, value);
   switch (path) {
-    case 'rssForm.errors':
+    case 'rssForm.messages':
       if (value !== '') {
-        errors.innerHTML = `${i18next.t(`errors.${value}`)}`;
+        message.innerHTML = `${i18next.t(`messages.${value}`)}`;
         elements.submitBtn.disabled = true;
-        errors.classList.remove('invisible');
-        elements.input.classList.add('is-invalid');
+        const inputClass = (value === 'success') ? 'is-valid' : 'is-invalid';
+        elements.input.classList.add(`${inputClass}`);
+        message.classList.remove('invisible');
+        const messageClass = (value === 'success') ? 'alert-success' : 'alert-danger';
+        message.classList.add(`${messageClass}`);
         return;
       }
       elements.submitBtn.disabled = false;
-      errors.classList.add('invisible');
+      message.classList.remove('alert-success', 'alert-danger', 'is-valid', 'is-invalid');
+      message.classList.add('invisible');
       elements.input.classList.remove('is-invalid');
       break;
     case 'rssForm.status':
-      if (value === 'loading') {
-        spinner.classList.remove('invisible');
-        return;
-      }
-      if (value === 'modal') {
-        console.log(state, path, value);
-        renderPosts(state, elements);
-        return;
-      }
-      spinner.classList.add('invisible');
+      renderStatus(value, state, elements);
       break;
     case 'rssForm.data.feeds':
       renderFeeds(state, elements);
@@ -89,25 +97,25 @@ const watch = (state, elements) => onChange(state, (path, value) => {
     case 'rssForm.data.posts':
       renderPosts(state, elements);
       break;
-
     case 'rssForm.lang':
       i18next.changeLanguage(value).then(() => {
         setTranslation(getTranslatableElements());
-        document.getElementById('errors').innerHTML = i18next.t(`errors.${state.rssForm.errors}`);
+        message.innerHTML = i18next.t(`errors.${state.rssForm.errors}`);
       });
       break;
     case 'rssForm.data.url':
       try {
         schema.validateSync(state.rssForm.data, { abortEarly: false });
-        elements.input.classList.remove('is-invalid');
+        elements.input.classList.remove('is-valid', 'is-invalid');
         elements.submitBtn.disabled = false;
-        errors.innerHTML = '';
-        errors.classList.add('invisible');
+        message.innerHTML = '';
+        message.classList.add('invisible');
       } catch (validationErrors) {
-        state.rssForm.errors = validationErrors.message;
+        state.rssForm.messages = validationErrors.message;
         elements.submitBtn.disabled = true;
-        errors.innerHTML = i18next.t(`errors.${validationErrors.message}`);
-        errors.classList.remove('invisible').add('visible');
+        message.innerHTML = i18next.t(`messages.${validationErrors.message}`);
+        message.classList.remove('invisible');
+        message.classList.add('visible', 'alert-danger');
       }
       break;
     default:
