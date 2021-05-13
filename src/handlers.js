@@ -88,11 +88,10 @@ const setHandlers = (state) => {
     btnDetails.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        // eslint-disable-next-line no-param-reassign
         state.rssForm.readedPostsId = [...state.rssForm.readedPostsId, e.target.getAttribute('data-modal')];
         watchedState.rssForm.status = 'modal';
         watchedState.rssForm.status = 'filling';
-        console.log('btnDetails');
+        // console.log('btnDetails');
         const modal = document.getElementById(e.target.getAttribute('data-modal'));
         modal.classList.add('show');
         const close = modal.querySelectorAll('[data-bs-dismiss]');

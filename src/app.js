@@ -13,7 +13,7 @@ export default () => {
       },
       readedPostsId: [],
       lang: 'en',
-      errors: '',
+      messages: '',
     },
   };
 

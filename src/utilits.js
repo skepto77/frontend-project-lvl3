@@ -21,16 +21,12 @@ const setTranslation = (elements) => {
   _.forEach(elements, (value, key) => {
     if (key === 'placeholder') {
       document.querySelector('input').placeholder = i18next.t('placeholder');
-    }
-    if (value && key !== 'placeholder') {
-      // eslint-disable-next-line no-param-reassign
-      value.textContent = i18next.t(key);
-    }
-    if (value instanceof NodeList) {
+    } else if (value instanceof NodeList) {
       value.forEach((item) => {
-        // eslint-disable-next-line no-param-reassign
         item.textContent = i18next.t(key);
       });
+    } else {
+      value.textContent = i18next.t(key);
     }
   });
 };

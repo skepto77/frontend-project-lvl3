@@ -69,24 +69,35 @@ const renderStatus = (status, state, elements) => {
   }
 };
 
+const renderMessage = (value, state, elements) => {
+  switch (value) {
+    case 'success':
+      message.innerHTML = `${i18next.t(`messages.${value}`)}`;
+      elements.submitBtn.disabled = true;
+      elements.input.classList.add('is-valid');
+      message.classList.remove('invisible');
+      message.classList.add('alert-success');
+      break;
+    case '':
+      elements.submitBtn.disabled = false;
+      message.classList.remove('alert-success', 'alert-danger', 'is-valid', 'is-invalid');
+      message.classList.add('invisible');
+      elements.input.classList.remove('is-valid', 'is-invalid');
+      break;
+    default:
+      message.innerHTML = `${i18next.t(`messages.${value}`)}`;
+      elements.submitBtn.disabled = true;
+      elements.input.classList.add('is-invalid');
+      message.classList.remove('invisible');
+      message.classList.add('alert-danger');
+  }
+};
+
 const watch = (state, elements) => onChange(state, (path, value) => {
   // console.log(state, path, value);
   switch (path) {
     case 'rssForm.messages':
-      if (value !== '') {
-        message.innerHTML = `${i18next.t(`messages.${value}`)}`;
-        elements.submitBtn.disabled = true;
-        const inputClass = (value === 'success') ? 'is-valid' : 'is-invalid';
-        elements.input.classList.add(`${inputClass}`);
-        message.classList.remove('invisible');
-        const messageClass = (value === 'success') ? 'alert-success' : 'alert-danger';
-        message.classList.add(`${messageClass}`);
-        return;
-      }
-      elements.submitBtn.disabled = false;
-      message.classList.remove('alert-success', 'alert-danger', 'is-valid', 'is-invalid');
-      message.classList.add('invisible');
-      elements.input.classList.remove('is-invalid');
+      renderMessage(value, state, elements);
       break;
     case 'rssForm.status':
       renderStatus(value, state, elements);
@@ -100,22 +111,16 @@ const watch = (state, elements) => onChange(state, (path, value) => {
     case 'rssForm.lang':
       i18next.changeLanguage(value).then(() => {
         setTranslation(getTranslatableElements());
-        message.innerHTML = i18next.t(`errors.${state.rssForm.errors}`);
+        message.innerHTML = i18next.t(`messages.${state.rssForm.messages}`);
       });
       break;
     case 'rssForm.data.url':
       try {
         schema.validateSync(state.rssForm.data, { abortEarly: false });
-        elements.input.classList.remove('is-valid', 'is-invalid');
-        elements.submitBtn.disabled = false;
-        message.innerHTML = '';
-        message.classList.add('invisible');
+        renderMessage('', state, elements);
       } catch (validationErrors) {
         state.rssForm.messages = validationErrors.message;
-        elements.submitBtn.disabled = true;
-        message.innerHTML = i18next.t(`messages.${validationErrors.message}`);
-        message.classList.remove('invisible');
-        message.classList.add('visible', 'alert-danger');
+        renderMessage(validationErrors.message, state, elements);
       }
       break;
     default:
