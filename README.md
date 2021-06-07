@@ -6,4 +6,4 @@
 
 Service for reading and aggregating RSS channels. The added channels are updated every 5 seconds. English and Russian languages are available
 
-[demo](https://frontend-project-lvl3-lovat-two.vercel.app)   
+[demo](https://skepto-rss-reader.vercel.app/)   
