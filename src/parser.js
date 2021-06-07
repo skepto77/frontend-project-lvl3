@@ -30,7 +30,8 @@ const parse = (data, url) => {
     const description = item.querySelector('description').textContent;
     const pubDate = new Date(item.querySelector('pubDate').textContent);
 
-    return { name,
+    return {
+      name,
       link,
       description,
       idFeed: id,

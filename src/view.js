@@ -1,5 +1,4 @@
 import onChange from 'on-change';
-import * as y from 'yup';
 import _ from 'lodash';
 import {
   getTranslatableElements,
@@ -10,15 +9,6 @@ import {
   message,
   isPostViewed,
 } from './utilits';
-
-/* eslint no-param-reassign: 0 */
-// NOTE: because of incompatability between commonjs and esm
-
-const yup = !y.object ? y.default : y;
-
-const schema = yup.object().shape({
-  url: yup.string().required().url('incorrectUrl'),
-});
 
 const renderFeeds = (state, i18nextInstance) => {
   feeds.innerHTML = `<h2 class="feeds__title">${i18nextInstance.t('feedsTitle')}</h2><ul class="list-group mb-5">${state.rssForm.data.feeds
@@ -80,19 +70,26 @@ const renderStatus = (status, state, elements, i18nextInstance) => {
 };
 
 const renderMessage = (value, state, elements, i18nextInstance) => {
+  console.log(value);
   switch (value) {
     case 'success':
       message.innerHTML = `${i18nextInstance.t(`messages.${value}`)}`;
       elements.submitBtn.disabled = true;
-      elements.input.classList.add('is-valid');
+      elements.input.classList.remove('is-valid');
       message.classList.remove('invisible');
       message.classList.add('alert-success');
+      break;
+    case 'approved':
+      elements.submitBtn.disabled = false;
+      message.classList.remove('alert-success', 'alert-danger');
+      message.classList.add('invisible');
+      elements.input.classList.remove('is-invalid');
+      elements.input.classList.add('is-valid');
       break;
     case '':
       elements.submitBtn.disabled = false;
       message.classList.remove('alert-success', 'alert-danger', 'is-valid', 'is-invalid');
       message.classList.add('invisible');
-      elements.input.classList.remove('is-valid', 'is-invalid');
       break;
     default:
       message.innerHTML = `${i18nextInstance.t(`messages.${value}`)}`;
@@ -126,15 +123,6 @@ const watch = (state, elements, i18nextInstance) => onChange(state, (path, value
       i18nextInstance.changeLanguage(value).then(() => {
         renderStatus('translate', state, elements, i18nextInstance);
       });
-      break;
-    case 'rssForm.data.url':
-      try {
-        schema.validateSync(state.rssForm.data, { abortEarly: false });
-        renderMessage('', state, elements, i18nextInstance);
-      } catch (validationErrors) {
-        state.rssForm.messages = validationErrors.message;
-        renderMessage(validationErrors.message, state, elements, i18nextInstance);
-      }
       break;
     default:
       throw new Error(`Unknown path: ${path}`);

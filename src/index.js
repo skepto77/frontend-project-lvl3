@@ -5,6 +5,6 @@
 // import 'bootstrap/js/dist/util';
 // import 'bootstrap/js/dist/dropdown'
 import './scss/app.scss';
-import app from './app';
+import runApp from './init';
 
-app();
+runApp();
