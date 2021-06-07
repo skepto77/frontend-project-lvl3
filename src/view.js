@@ -17,7 +17,7 @@ const renderFeeds = (state, i18nextInstance) => {
 };
 
 const renderPosts = (state, i18nextInstance) => {
-  posts.innerHTML = `<h2 class="posts__title">${i18nextInstance.t('postsTitle')}</h2>`;
+  posts.innerHTML = !state.rssForm.data.posts.length ? '' : `<h2 class="posts__title">${i18nextInstance.t('postsTitle')}</h2>`;
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'mb-5');
   ul.innerHTML = `${state.rssForm.data.posts
