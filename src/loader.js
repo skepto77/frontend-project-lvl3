@@ -11,7 +11,6 @@ const getRss = (url) => axios.get(`${proxy}${url}`)
     } else {
       throw new Error('Network Error');
     }
-    // // throw new NetworkError('Network Error');
   });
 
 export default getRss;

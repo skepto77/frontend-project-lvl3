@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import i18next from 'i18next';
 
 const getTranslatableElements = () => {
   const elements = {
@@ -17,16 +16,13 @@ const getTranslatableElements = () => {
   return elements;
 };
 
-const setTranslation = (elements) => {
+const setTranslation = (elements, i18nextInstance) => {
   _.forEach(elements, (value, key) => {
     if (key === 'placeholder') {
-      document.querySelector('input').placeholder = i18next.t('placeholder');
-    } else if (value instanceof NodeList) {
-      value.forEach((item) => {
-        item.textContent = i18next.t(key);
-      });
-    } else {
-      value.textContent = i18next.t(key);
+      document.querySelector('input').placeholder = i18nextInstance.t('placeholder');
+    } else if (value && key !== 'placeholder') {
+      // eslint-disable-next-line no-param-reassign
+      value.textContent = i18nextInstance.t(key);
     }
   });
 };
@@ -39,6 +35,6 @@ export const form = document.querySelector('form');
 export const btnExamplesLinks = document.querySelectorAll('.rssExample');
 export const btnLanguages = document.querySelectorAll('.lang');
 
-export const isPostViewed = (state, id) => state.rssForm.readedPostsId.includes(`p_${id}`);
+export const isPostViewed = (state, id) => state.rssForm.readedPostsId.includes(id);
 
 export { getTranslatableElements, setTranslation };

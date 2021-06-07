@@ -7,8 +7,8 @@ import {
   form,
 } from './utilits';
 
-const setHandlers = (state) => {
-  const watchedState = watch(state, getTranslatableElements());
+const setHandlers = (state, i18nextInstance) => {
+  const watchedState = watch(state, getTranslatableElements(), i18nextInstance);
   const feedIsLoaded = (value) => state.rssForm.data.feeds.find((i) => i.link === value);
   const timeout = 11000;
 
@@ -84,14 +84,11 @@ const setHandlers = (state) => {
 
   document.addEventListener('DOMNodeInserted', () => {
     const btnDetails = document.querySelectorAll('#posts li>.btn');
-    // console.log(btnDetails);
     btnDetails.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         state.rssForm.readedPostsId = [...state.rssForm.readedPostsId, e.target.getAttribute('data-modal')];
-        watchedState.rssForm.status = 'modal';
-        watchedState.rssForm.status = 'filling';
-        // console.log('btnDetails');
+        watchedState.rssForm.modal = e.target.getAttribute('data-modal');
         const modal = document.getElementById(e.target.getAttribute('data-modal'));
         modal.classList.add('show');
         const close = modal.querySelectorAll('[data-bs-dismiss]');

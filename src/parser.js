@@ -1,17 +1,12 @@
 import _ from 'lodash';
 
 const parse = (data, url) => {
-  // console.log(data);
   const parser = new DOMParser();
   const rssData = parser.parseFromString(data, 'text/xml');
 
   if (rssData.querySelector('parsererror')) {
     throw new TypeError('Parse Error');
   }
-  // console.log(rssData.querySelector('rss'));
-  // if (!rssData.querySelector('rss')) {
-  //   throw new TypeError('Parse Error');
-  // }
 
   const result = {
     feeds: null,
@@ -34,8 +29,8 @@ const parse = (data, url) => {
     const link = item.querySelector('link').textContent;
     const description = item.querySelector('description').textContent;
     const pubDate = new Date(item.querySelector('pubDate').textContent);
-    return {
-      name,
+
+    return { name,
       link,
       description,
       idFeed: id,

@@ -39,7 +39,7 @@
                   class="form-control form-control-lg w-100 border-0 shadow-sm bg-white rounded"
                   id="rssSource"
                   aria-describedby="rssHelp"
-                  placeholder="Enter rss feed url"
+                  placeholder=""
                 />
               </div>
               <div class="col-auto align-bottom">
@@ -47,12 +47,10 @@
                   type="submit"
                   class="btn btn-lg btn-primary w-30"
                   disabled
-                >
-                  Submit
-                </button>
+                ></button>
               </div>
             </form>
-            <span data-i18n="content.example">example:</span>
+            <span data-i18n="content.example"></span>
             <a href="https://lenta.ru/rss/news" class="rssExample"
               >lenta.ru/rss/news</a
             >,
@@ -101,8 +99,8 @@
     <div class="container">
       <div class="row">
         <div class="col-10 mx-auto">
-          <ul id="feeds"></ul>
-          <ul id="posts"></ul>
+          <div id="feeds"></div>
+          <div id="posts"></div>
         </div>
       </div>
     </div>
